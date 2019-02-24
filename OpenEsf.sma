@@ -9,7 +9,7 @@ new CharacterMenu;
 
 enum _:CHARACTER_DATA
 {
-	CHARACTER_NAME[32], 
+	CHARACTER_NAME[32],
 	Array:CHARACTER_FORMS
 };
 
