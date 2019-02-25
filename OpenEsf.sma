@@ -70,7 +70,7 @@ public client_infochanged(plr)
 	if (!is_user_alive(plr))
 		return;
 	
-	ResetPlayerCharacterProperties(plr);
+	ApplyPlayerCharacterProperties(plr);
 }
 
 @OnClassMenu(plr)
