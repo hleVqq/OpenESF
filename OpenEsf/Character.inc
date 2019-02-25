@@ -77,7 +77,7 @@ GetFormProperties(chr, form, formProps[FormProperty])
 	ArrayGetArray(chrProps[CHARACTER_FORM_PROPERTIES], form, formProps);
 }
 
-ResetPlayerCharacterProperties(plr)
+ApplyPlayerCharacterProperties(plr)
 {
 	new formProps[FormProperty];
 	GetFormProperties(PlayerCharacter[plr], PlayerForm[plr], formProps);
