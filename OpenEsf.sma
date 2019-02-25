@@ -31,7 +31,7 @@ public client_authorized(plr)
 
 public client_putinserver(plr)
 {
-	// For player being treated as alive upon connect
+	// Fix player being treated as alive upon connect
 	entity_set_int(plr, EV_INT_deadflag, DEAD_DEAD);
 }
 
