@@ -78,7 +78,7 @@ Array:ScanCharacterFiles()
     get_localinfo("amxx_datadir", path, charsmax(path));
     add(path, charsmax(path), "/OpenEsf/Characters");
 
-    return ScanFiles(path, "json");
+    return ScanFiles(path, ".json");
 }
 
 ParseCharacterFile(const path[])
