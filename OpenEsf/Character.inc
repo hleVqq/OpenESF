@@ -24,6 +24,8 @@ new Array:CharactersProperties = Invalid_Array;
 
 InitializeCharacters()
 {
+    CharactersProperties = ArrayCreate(CharacterProperty);
+    
     new Array:files = ScanCharacterFiles();
     new count = ArraySize(files);
     new path[256];
