@@ -1,0 +1,16 @@
+{
+    "name": "Goku",
+    "forms":
+    [
+        {
+			"name": "Base",
+			"model": "OpenGoku",
+			"modelParts": [0, 0, 0]
+        },
+        {
+            "name": "Super Saiyan",
+            "model": "OpenGoku",
+			"modelParts": [1, 0, 0]
+        }
+    ]
+}
