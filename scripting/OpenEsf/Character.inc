@@ -61,8 +61,8 @@ PrecacheCharacterFiles()
         for (new j; j < formsCount; j++)
         {
             ArrayGetArray(forms, j, fProps);
+            server_print("[OpenESF] Precaching player model %s", fProps[FP_MODEL]);
             precache_model(GetPlayerModelPath(fProps[FP_MODEL]));
-            server_print("[OpenESF] Precaching model %s", GetPlayerModelPath(fProps[FP_MODEL]));
         }
     }
 }
