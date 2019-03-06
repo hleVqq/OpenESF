@@ -44,7 +44,7 @@ LoadCharacters()
 PrecacheCharacterFiles()
 {
     new chrProps[CharacterProperty], formProps[FormProperty];
-    new chrsCount = GetchrsCount();
+    new chrsCount = GetCharactersCount();
 
     for (new i; i < chrsCount; i++)
     {
@@ -62,7 +62,7 @@ PrecacheCharacterFiles()
     }
 }
 
-GetchrsCount()
+GetCharactersCount()
 {
     return ArraySize(CharactersProperties);
 }
