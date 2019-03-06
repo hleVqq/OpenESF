@@ -1,8 +1,3 @@
-#if defined FILE_INCLUDED
-    #endinput
-#endif
-#define FILE_INCLUDED
-
 #define MAX_PATH_LENGTH 256
 #define MAX_FILE_LENGTH 64
 

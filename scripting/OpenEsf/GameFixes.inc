@@ -1,7 +1,4 @@
-#if defined GAMEFIXES_INCLUDED
-    #endinput
-#endif
-#define GAMEFIXES_INCLUDED
+#include <engine>
 
 /**
  * Fixes game bug where player's dead flag is DEAD_NO upon connecting. 

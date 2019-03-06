@@ -1,12 +1,7 @@
-#if defined CHARACTERS_INCLUDED
-    #endinput
-#endif
-#define CHARACTER_INCLUDED
-
 #include <json>
 
-#include "OpenEsf/File.inc"
-#include "OpenEsf/PlayerModel.inc"
+#define INVALID_CHARACTER -1
+#define INITIAL_FORM 0
 
 enum _:CharacterProperty
 {
@@ -48,26 +43,26 @@ LoadCharacters()
 
 PrecacheCharacterFiles()
 {
-    new cProps[CharacterProperty], fProps[FormProperty];
-    new charactersCount = GetCharactersCount();
+    new chrProps[CharacterProperty], formProps[FormProperty];
+    new chrsCount = GetchrsCount();
 
-    for (new i; i < charactersCount; i++)
+    for (new i; i < chrsCount; i++)
     {
-        ArrayGetArray(CharactersProperties, i, cProps);
+        ArrayGetArray(CharactersProperties, i, chrProps);
         
-        new Array:forms = cProps[CP_FORMS];
+        new Array:forms = chrProps[CP_FORMS];
         new formsCount = ArraySize(forms);
 
         for (new j; j < formsCount; j++)
         {
-            ArrayGetArray(forms, j, fProps);
-            server_print("[OpenESF] Precaching player model %s", fProps[FP_MODEL]);
-            precache_model(GetPlayerModelPath(fProps[FP_MODEL]));
+            ArrayGetArray(forms, j, formProps);
+            server_print("[OpenESF] Precaching player model %s", formProps[FP_MODEL]);
+            precache_model(GetPlayerModelPath(formProps[FP_MODEL]));
         }
     }
 }
 
-GetCharactersCount()
+GetchrsCount()
 {
     return ArraySize(CharactersProperties);
 }
@@ -87,29 +82,44 @@ ParseCharacterFile(const path[])
 
     new JSON:cObj = json_parse(path, true);
 
-    new cProps[CharacterProperty];
-    json_object_get_string(cObj, "name", cProps[CP_NAME], charsmax(cProps[CP_NAME]));
-    cProps[CP_FORMS] = ArrayCreate(FormProperty);
+    new chrProps[CharacterProperty];
+    json_object_get_string(cObj, "name", chrProps[CP_NAME], charsmax(chrProps[CP_NAME]));
+    chrProps[CP_FORMS] = ArrayCreate(FormProperty);
 
     new JSON:formsArray = json_object_get_value(cObj, "forms");
     new formsCount = json_array_get_count(formsArray);
-    new fProps[FormProperty];
+    new formProps[FormProperty];
 
     for (new i; i < formsCount; i++)
     {
         new JSON:fObj = json_array_get_value(formsArray, i);
-        json_object_get_string(fObj, "name", fProps[FP_NAME], charsmax(fProps[FP_NAME]));
-        json_object_get_string(fObj, "model", fProps[FP_MODEL], charsmax(fProps[FP_MODEL]));
-        fProps[FP_MODEL_PARTS] = ArrayCreate();
+        json_object_get_string(fObj, "name", formProps[FP_NAME], charsmax(formProps[FP_NAME]));
+        json_object_get_string(fObj, "model", formProps[FP_MODEL], charsmax(formProps[FP_MODEL]));
+        formProps[FP_MODEL_PARTS] = ArrayCreate();
 
         new JSON:modelPartsArray = json_object_get_value(fObj, "modelParts");
         new modelPartsCount = json_array_get_count(modelPartsArray);
 
         for (new j; j < modelPartsCount; j++)
-            ArrayPushCell(fProps[FP_MODEL_PARTS], json_array_get_number(modelPartsArray, j));
+            ArrayPushCell(formProps[FP_MODEL_PARTS], json_array_get_number(modelPartsArray, j));
 
-        ArrayPushArray(cProps[CP_FORMS], fProps);
+        ArrayPushArray(chrProps[CP_FORMS], formProps);
     }
 
-    ArrayPushArray(CharactersProperties, cProps);
+    ArrayPushArray(CharactersProperties, chrProps);
+}
+
+GetFormProperty(chr, form, prop = -1)
+{
+    new chrProps[CharacterProperty], formProps[FormProperty];
+    ArrayGetArray(CharactersProperties, chr, chrProps);
+    ArrayGetArray(chrProps[CP_FORMS], form, formProps);
+
+    switch (prop)
+    {
+        case FP_NAME: copy(formProps, charsmax(formProps), formProps[FP_NAME]);
+        case FP_MODEL: copy(formProps, charsmax(formProps), formProps[FP_MODEL]);
+    }
+
+    return formProps;
 }
