@@ -56,5 +56,5 @@ public client_PostThink(plr)
 
 @OnClassMenu(plr)
 {
-    SetPlayerCharacter(plr, 1, "goku"); // PLACEHOLDER
+    SetPlayerCharacter(plr, 0, "goku"); // PLACEHOLDER, automatically chooses first character for player
 }
