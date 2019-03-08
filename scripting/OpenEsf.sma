@@ -3,8 +3,9 @@
 
 #include "OpenEsf/GameFixes.inc"
 #include "OpenEsf/File.inc"
-#include "OpenEsf/PlayerModel.inc"
+#include "OpenEsf/Model.inc"
 #include "OpenEsf/Character.inc"
+#include "OpenEsf/PlayerModel.inc"
 #include "OpenEsf/PlayerCharacter.inc"
 
 public plugin_precache()
@@ -14,7 +15,7 @@ public plugin_precache()
 
 public plugin_init()
 {
-    register_plugin("OpenESF", "0.1", "hleV");
+    register_plugin("OpenESF", "0.2", "hleV");
 
     register_message(get_user_msgid("VGUIMenu"), "@OnVguiMenu");
 }
@@ -31,8 +32,12 @@ public client_disconnected(plr)
 
 public client_infochanged(plr)
 {
-    if (GetPlayerCharacter(plr) != INVALID_CHARACTER)
-        UpdatePlayerModel(plr);
+    UpdatePlayerModel(plr);
+}
+
+public client_PostThink(plr)
+{
+    UpdatePlayerModelBody(plr);
 }
 
 @OnVguiMenu(msg, dest, ent)
@@ -51,5 +56,5 @@ public client_infochanged(plr)
 
 @OnClassMenu(plr)
 {
-    SetPlayerCharacter(plr, 0); // PLACEHOLDER
+    SetPlayerCharacter(plr, 1, "goku"); // PLACEHOLDER
 }

@@ -56,7 +56,6 @@ PrecacheCharacterFiles()
         for (new j; j < formsCount; j++)
         {
             ArrayGetArray(forms, j, formProps);
-            server_print("[OpenESF] Precaching player model %s", formProps[FP_MODEL]);
             precache_model(GetPlayerModelPath(formProps[FP_MODEL]));
         }
     }
@@ -80,28 +79,33 @@ ParseCharacterFile(const path[])
 {
     server_print("[OpenESF] Parsing character %s", path);
 
-    new JSON:cObj = json_parse(path, true);
+    new JSON:chrJson = json_parse(path, true);
 
     new chrProps[CharacterProperty];
-    json_object_get_string(cObj, "name", chrProps[CP_NAME], charsmax(chrProps[CP_NAME]));
+    json_object_get_string(chrJson, "name", chrProps[CP_NAME], charsmax(chrProps[CP_NAME]));
     chrProps[CP_FORMS] = ArrayCreate(FormProperty);
 
-    new JSON:formsArray = json_object_get_value(cObj, "forms");
-    new formsCount = json_array_get_count(formsArray);
+    new JSON:formsJson = json_object_get_value(chrJson, "forms");
     new formProps[FormProperty];
+    new modelParts[2];
 
-    for (new i; i < formsCount; i++)
+    for (new i, formsCount = json_array_get_count(formsJson); i < formsCount; i++)
     {
-        new JSON:fObj = json_array_get_value(formsArray, i);
-        json_object_get_string(fObj, "name", formProps[FP_NAME], charsmax(formProps[FP_NAME]));
-        json_object_get_string(fObj, "model", formProps[FP_MODEL], charsmax(formProps[FP_MODEL]));
-        formProps[FP_MODEL_PARTS] = ArrayCreate();
+        new JSON:formJson = json_array_get_value(formsJson, i);
+        json_object_get_string(formJson, "name", formProps[FP_NAME], charsmax(formProps[FP_NAME]));
+        json_object_get_string(formJson, "model", formProps[FP_MODEL], charsmax(formProps[FP_MODEL]));
+        formProps[FP_MODEL_PARTS] = ArrayCreate(2);
 
-        new JSON:modelPartsArray = json_object_get_value(fObj, "modelParts");
-        new modelPartsCount = json_array_get_count(modelPartsArray);
+        new JSON:modelPartsJson = json_object_get_value(formJson, "modelParts");
 
-        for (new j; j < modelPartsCount; j++)
-            ArrayPushCell(formProps[FP_MODEL_PARTS], json_array_get_number(modelPartsArray, j));
+        for (new j, modelPartsGroupsCount = json_array_get_count(modelPartsJson); j < modelPartsGroupsCount; j++)
+        {
+            new JSON:modelPartsArray = json_array_get_value(modelPartsJson, j);
+
+            modelParts[MP_INDEX] = json_array_get_number(modelPartsArray, MP_INDEX);
+            modelParts[MP_GROUPSIZE] = json_array_get_number(modelPartsArray, MP_GROUPSIZE);
+            ArrayPushArray(formProps[FP_MODEL_PARTS], modelParts);
+        }
 
         ArrayPushArray(chrProps[CP_FORMS], formProps);
     }
@@ -109,6 +113,7 @@ ParseCharacterFile(const path[])
     ArrayPushArray(CharactersProperties, chrProps);
 }
 
+// Needs rework
 GetFormProperty(chr, form, prop = -1)
 {
     new chrProps[CharacterProperty], formProps[FormProperty];

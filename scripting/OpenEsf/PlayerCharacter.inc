@@ -6,6 +6,10 @@ SetPlayerCharacter(plr, character, const baseClassCommand[] = "goku")
     PlayerCharacter[plr] = character;
     PlayerForm[plr] = INITIAL_FORM;
 
+    new form, chr = GetPlayerCharacter(plr, form);
+    new props[FormProperty]; props = GetFormProperty(chr, form);
+    SetPlayerModel(plr, props[FP_MODEL], false);
+
     if (!is_user_alive(plr))
         engclient_cmd(plr, baseClassCommand);
 }
@@ -13,17 +17,22 @@ SetPlayerCharacter(plr, character, const baseClassCommand[] = "goku")
 ClearPlayerCharacter(plr)
 {
     PlayerCharacter[plr] = INVALID_CHARACTER;
+    ClearPlayerModel(plr);
 }
 
-GetPlayerCharacter(plr)
+GetPlayerCharacter(plr, &form = -1)
 {
+    form = PlayerForm[plr];
+
     return PlayerCharacter[plr];
 }
 
-UpdatePlayerModel(plr)
+GetPlayerForm(plr)
 {
-    new chr = PlayerCharacter[plr];
-    new form = PlayerForm[plr];
+    return PlayerForm[plr];
+}
 
-    SetPlayerModel(plr, GetFormProperty(chr, form, FP_MODEL));
+bool:HasPlayerCharacter(plr)
+{
+    return PlayerCharacter[plr] != INVALID_CHARACTER;
 }

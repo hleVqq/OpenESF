@@ -4,11 +4,11 @@
 /**
  * Scans all files and directories recursively and gathers files with given extension.
  *
- * @note         @param path should not be constant due to mistake in AMXX includes
+ * @note         @param path should not be constant due to mistake in AMXX include
  * 
  * @param path   Path where to start the scan
  * @param ext    (Optional) File extension to search for, e.g. ".json"
- * @param files  (Optional) Array to store file paths in
+ * @param files  (Optional) Array to use as addition, otherwise new Array will be created
  *
  * @return       Array with stored file paths. Use ArraySize() to find file count
  */
