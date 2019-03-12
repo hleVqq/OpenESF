@@ -7,6 +7,9 @@
 #include "OpenEsf/Character.inc"
 #include "OpenEsf/PlayerModel.inc"
 #include "OpenEsf/PlayerCharacter.inc"
+#include "OpenEsf/Overridables.inc"
+
+#tryinclude "OpenEsf/Overrides.inc"
 
 public plugin_precache()
 {
@@ -46,12 +49,18 @@ public client_PostThink(plr)
 
     if (menu == 3)
     {
-        RequestFrame("@OnClassMenu", ent);
-
-        return PLUGIN_HANDLED;
+        if (OnClassMenu(ent) == PLUGIN_HANDLED)
+            return PLUGIN_HANDLED;
     }
 
     return PLUGIN_CONTINUE;
+}
+
+OnClassMenu(plr) <>
+{
+    RequestFrame("@OnClassMenu", plr);
+
+    return PLUGIN_HANDLED;
 }
 
 @OnClassMenu(plr)
